@@ -1,0 +1,13 @@
+/* Conseils I2C*/ 
+
+
+Pour déterminer les addr --> i2cscanner voir exemple oled
+
+Dans les exemple ce sont ces addresses qui sont utilisées
+
+OLED       ||   0x3C    ||
+DAC        ||   0x62    ||
+bmp        ||   0x77    ||
+EEPROm     ||   0x50    ||
+MCP23017   ||   0x20    ||
+

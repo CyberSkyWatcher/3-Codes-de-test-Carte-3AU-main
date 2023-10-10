@@ -1,0 +1,7 @@
+*****************************Test OLED + dht **********************
+
+Affichage des valeurs du capteur de température sur l'ecran LCD OLED.
+
+--> Ici nous n'explorons que quelques fonctions basiques afin de démontrer le bon fonctionnement du module
+Naturellement la bibliothèque SDD_1306 possède de nombreuses autres fonctionnalités.
+

@@ -1,0 +1,7 @@
+Ceci est un exemple d'application complexe telle qu'elle pourrait être demandée. 
+L'objectif est d'illustrer dans quelle mesure cette carte servirait pour donner cours. 
+Ce travail est à mettre en vis à vis des productions qui ont été faites dans le cadre du  cours de systèmes embarqués.
+
+
+
+Le code master est fait en multi fichiers afin d'allustrer cette pratique. 

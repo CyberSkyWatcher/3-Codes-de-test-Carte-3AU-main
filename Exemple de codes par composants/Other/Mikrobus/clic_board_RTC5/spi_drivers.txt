@@ -1,0 +1,46 @@
+//*********************************************************************************
+//                    GLOBAL CONSTANTS SPI COMMANDS
+//.................................................................................
+unsigned char rtcc_buf       ;           // global data buffer for the RTCC
+#define  NCS_SPI_RTCC  PORTCbits.RC2     // /CS for the SPI RTCC
+#define  NCS_SPI       PORTAbits.RA2     // /CS for the SPI_DEMUX (MCP23S17) 
+#define  T1_OVFL       PIR1bits.TMR1IF   // overflow of TMR1  
+#define  T1_ON         T1CONbits.TMR1ON  // start/stop T1 bit
+// ................................................................................
+//                     BASIC COMMUNICATION FUNCTIONS 
+//.................................................................................
+void stop_mssp1(void) 
+{ SSP1CON1bits.SSPEN = 0 ; }         // disable MSSP1 module
+
+void ini_spi1(void)                  // init the SPI module on MSSP1
+   { TRISC = 0xd3    ;               // C4 = SDI1 = SDA1 = in
+                                     // C5 = SDO1 = out,   C3 = SCK1 = SCL1 = out
+                                     // C2 = NCS_SPI_RTCC
+     SSP1STAT = 0x40 ;               // CKE = 1 ; CK=iddle_low, shift on CK+
+ //  SSP1CON1 = 0x20 ;               // CKP = 0, FOSC/4  ;
+     SSP1CON1 = 0x22 ;               // CKP = 0, FOSC/64 ; see the SPI_expander's datasheet
+                            }
+void spi_wrbyte(unsigned char spi_data) // writes a byte on the SPI bus (for LCD)
+ { SSP1BUF = spi_data;                  // load data buffer 
+   while(!PIR1bits.SSP1IF)  ;           // poll the SPI interrupt flag
+   PIR1bits.SSP1IF = 0;     }           // clear the flag after end of transmission
+
+unsigned char spi_rdbyte (void)         // reads a byte from the SPI bus
+{
+unsigned char aux;
+SSP1BUF = 0x55               ;          // start ck generator.
+while(!PIR1bits.SSP1IF)      ;          // poll the SPI interrupt flag
+aux=SSP1BUF;                            // temporary variable to store the received value 
+PIR1bits.SSP1IF = 0          ;          // clear the flag after end of receiving
+return aux                   ;          // return the SPI received value
+}
+void spi_rtcc_start(void)               // start of the SPI comm with the RTCC
+  { NCS_SPI_RTCC = 1         ;          // deactivate /CS
+    NCS_SPI_RTCC = 0         ;   }      // toggle     /CS
+//.......................................................................................                        
+  void spi_rtcc_stop(void)              // stop  of the SPI comm with the RTCC
+  { NCS_SPI_RTCC = 0             ;      // activate /CS
+    NCS_SPI_RTCC = 1         ;   }      // toggle   /CS
+//.......................................................................................                         
+ 
+
